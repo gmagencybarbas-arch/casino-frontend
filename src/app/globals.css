@@ -1,0 +1,121 @@
+@import "tailwindcss";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+@import "../themes/theme.css";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+img,
+picture img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Swiper: não expandir a largura da página — clip no container */
+.swiper-clip,
+.hero-banner-swiper {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Carrossel de jogos — fades nas bordas (white-label, pointer-events: none) */
+.game-carousel-fade {
+  position: relative;
+}
+
+.game-carousel-fade::before,
+.game-carousel-fade::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.game-carousel-fade::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-background), transparent);
+}
+
+.game-carousel-fade::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-background), transparent);
+}
+
+.game-carousel-fade-inner {
+  position: relative;
+  z-index: 0;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hero banner desktop — slides laterais com opacidade (área visível limitada pelo overflow do pai) */
+.hero-banner-swiper .swiper-slide {
+  opacity: 0.4;
+  transition: opacity 0.5s ease;
+}
+.hero-banner-swiper .swiper-slide-active,
+.hero-banner-swiper .swiper-slide-active-prev {
+  opacity: 1;
+}
+
+/* Pagination bullets - casino style */
+.hero-banner-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+.hero-banner-bullet-active {
+  width: 24px;
+  background: var(--color-accent);
+}
+
+/* Mobile: menos atraso em toques, sem flash de highlight */
+@media (pointer: coarse) {
+  body {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Modal de registo — altura no desktop alinhada ao viewport / imagem story */
+.register-modal-shell {
+  max-height: 90vh;
+}
+
+@media (width >= 48rem) {
+  .register-modal-shell {
+    max-height: min(82vh, 880px);
+  }
+}

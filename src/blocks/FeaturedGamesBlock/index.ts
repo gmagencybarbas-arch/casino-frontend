@@ -1,0 +1,1 @@
+export { FeaturedGamesBlock } from "./FeaturedGamesBlock";

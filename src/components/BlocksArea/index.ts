@@ -1,0 +1,1 @@
+export { BlocksArea } from "./BlocksArea";

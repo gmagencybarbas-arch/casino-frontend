@@ -1,0 +1,53 @@
+/* White-label Casino Theme - Dark Luxury Style */
+/* Backend can inject custom values to override these */
+/* Variables: --color-primary, --color-secondary, --color-background, --color-card, --color-text, --color-border, --color-hover */
+
+:root {
+  /* Primary brand */
+  --color-primary: #e5b318;
+  --color-secondary: #f0c420;
+  --color-primary-hover: #f0c420;
+  --color-primary-muted: rgba(229, 179, 24, 0.15);
+
+  /* Background layers */
+  --color-background: #0a0a0d;
+  --color-background-secondary: #121217;
+  --color-background-tertiary: #1a1a20;
+
+  /* Card and surface */
+  --color-card: #141419;
+  --color-card-hover: #1c1c23;
+
+  /* Text */
+  --color-text: #f5f5f7;
+  --color-text-secondary: #9ca3af;
+  --color-text-muted: #6b7280;
+
+  /* Hover state */
+  --color-hover: rgba(255, 255, 255, 0.08);
+
+  /* Accent - gold for CTAs */
+  --color-accent: #e5b318;
+  --color-accent-secondary: #f0c420;
+  --color-accent-text: #0a0a0d;
+
+  /* Borders */
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-hover: rgba(255, 255, 255, 0.1);
+
+  /* Shadows - soft, elegant */
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
+  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.5);
+
+  /* Border radius - 12px throughout */
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  /* Layout */
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 72px;
+  --header-height: 64px;
+  --mobile-nav-height: 60px;
+}

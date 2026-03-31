@@ -1,0 +1,28 @@
+/* Botão Depositar — brilho + padding (importado só com o Header) */
+.header-deposit-glow {
+  padding: 0.5rem 1rem;
+  box-shadow:
+    0 0 8px 1px color-mix(in srgb, var(--color-primary) 18%, transparent),
+    0 0 14px 2px color-mix(in srgb, var(--color-primary) 10%, transparent);
+  transition: box-shadow 0.22s ease, padding 0.22s ease, filter 0.22s ease;
+}
+
+.header-deposit-glow:hover {
+  padding: 0.625rem 1.125rem;
+  box-shadow:
+    0 0 14px 2px color-mix(in srgb, var(--color-primary) 55%, transparent),
+    0 0 28px 4px color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+@media (max-width: 639px) {
+  .header-deposit-glow {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.7rem;
+    line-height: 1rem;
+    gap: 0.25rem;
+  }
+
+  .header-deposit-glow:hover {
+    padding: 0.4rem 0.65rem;
+  }
+}

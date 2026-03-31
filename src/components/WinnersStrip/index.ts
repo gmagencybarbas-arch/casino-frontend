@@ -1,0 +1,1 @@
+export { WinnersStrip } from "./WinnersStrip";
