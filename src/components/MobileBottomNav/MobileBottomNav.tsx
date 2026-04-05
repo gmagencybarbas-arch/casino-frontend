@@ -8,9 +8,9 @@ import { SidebarIcon } from "@/components/Sidebar/SidebarIcon";
 
 const NAV_ITEMS = [
   { href: "#", label: "Menu", action: "menu" as const, icon: "menu" as const },
-  { href: "/casino", label: "Cassino", action: null, icon: "slot" as const },
+  { href: "/games/all", label: "Cassino", action: null, icon: "slot" as const },
   { href: "/", label: "Home", action: null, icon: "home" as const },
-  { href: "/videobingo", label: "Videobingo", action: null, icon: "bingo" as const },
+  { href: "/games/videobingo", label: "Videobingo", action: null, icon: "bingo" as const },
   { href: "/sports", label: "Esportes", action: null, icon: "trophy" as const },
   { href: "/promotions", label: "Promoções", action: "promotions" as const, icon: "gift" as const },
 ];

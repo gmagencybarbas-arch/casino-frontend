@@ -1,10 +1,43 @@
 "use client";
 
-import { FeaturedGamesBlock } from "@/blocks/FeaturedGamesBlock";
-import { GameSliderBlock } from "@/blocks/GameSliderBlock";
-import { Top10Block } from "@/blocks/Top10Block";
-import { ProvidersBlock } from "@/blocks/ProvidersBlock";
+import dynamic from "next/dynamic";
 import type { LayoutBlock } from "@/types/layout";
+
+const blockLoading = (
+  <div className="mb-10 h-[300px] animate-pulse rounded-xl bg-[var(--color-card)]" />
+);
+
+const FeaturedGamesBlock = dynamic(
+  () =>
+    import("@/blocks/FeaturedGamesBlock").then((m) => ({
+      default: m.FeaturedGamesBlock,
+    })),
+  { loading: () => blockLoading }
+);
+
+const GameSliderBlock = dynamic(
+  () =>
+    import("@/blocks/GameSliderBlock").then((m) => ({
+      default: m.GameSliderBlock,
+    })),
+  { loading: () => blockLoading }
+);
+
+const Top10Block = dynamic(
+  () =>
+    import("@/blocks/Top10Block").then((m) => ({
+      default: m.Top10Block,
+    })),
+  { loading: () => blockLoading }
+);
+
+const ProvidersBlock = dynamic(
+  () =>
+    import("@/blocks/ProvidersBlock").then((m) => ({
+      default: m.ProvidersBlock,
+    })),
+  { loading: () => blockLoading }
+);
 
 interface BlockRendererProps {
   block: LayoutBlock;
@@ -24,7 +57,7 @@ export function BlockRenderer({ block }: BlockRendererProps) {
       );
     case "slider":
     case "live_casino":
-    case "popular_games":
+    case "popular_games": {
       const isLive = block.type === "live_casino";
       return (
         <GameSliderBlock
@@ -33,6 +66,7 @@ export function BlockRenderer({ block }: BlockRendererProps) {
           icon={isLive ? "live" : "fire"}
         />
       );
+    }
     case "top10":
       return (
         <Top10Block

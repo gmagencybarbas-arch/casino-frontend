@@ -26,7 +26,7 @@ export function FeaturedGamesBlock({ title, category = "hot", icon = "slot" }: F
 
   return (
     <section className="mb-12" aria-label={title}>
-      <SectionHeader title={title} href="/games/recommended" icon={icon} linkVariant="accent" />
+      <SectionHeader title={title} href="/games/slots" icon={icon} linkVariant="accent" />
       <div className="flex flex-col md:grid md:grid-cols-[245px_1fr] gap-6">
         {/* Card destaque grande 245×367 - left (only desktop) */}
         <div className="hidden md:block mx-auto w-full max-w-[245px] shrink-0 lg:mx-0">

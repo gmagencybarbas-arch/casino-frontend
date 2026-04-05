@@ -1,0 +1,1 @@
+export { GamesCategoryClient } from "./GamesCategoryClient";

@@ -54,30 +54,50 @@ export function GameCard({ game, size = "default", rank, className = "" }: GameC
                 ? `(max-width: 1023px) 34vw, 245px`
                 : `(max-width: 1023px) 34vw, 190px`
           }
-          className={`object-cover transition-opacity duration-300 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+          className={`object-cover transition-all duration-300 group-hover:scale-[1.02] ${isLoaded ? "opacity-100" : "opacity-0"}`}
           loading="lazy"
           onLoad={() => setIsLoaded(true)}
           unoptimized
         />
       </div>
-      <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-0 transition-all duration-300 group-hover:opacity-100">
-        <div className={size === "small" ? "p-2" : "p-3"}>
-          {size !== "small" && (
-            <span className="mb-1 block text-xs font-medium text-white/80">{game.providerName ?? game.provider}</span>
-          )}
-          <p className={size === "small" ? "mb-1 line-clamp-2 text-xs font-semibold text-white" : "mb-2 line-clamp-2 text-sm font-semibold text-white"}>{game.name}</p>
+      <div className="pointer-events-none absolute inset-0 z-[8] flex flex-col items-center justify-center p-3 text-center opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
+        {/* Sem backdrop-blur — overlay sólido leve (muito mais barato na GPU) */}
+        <div
+          className="absolute inset-0 bg-[var(--color-background)]/55 transition-opacity"
+          aria-hidden
+        />
+        <div className="relative z-[1] flex max-w-full flex-col items-center justify-center gap-1.5 md:gap-3">
+          <span
+            className={
+              size === "small"
+                ? "line-clamp-1 max-w-[95%] text-[9px] font-medium uppercase tracking-wide text-white/80"
+                : "line-clamp-1 text-[10px] font-medium uppercase tracking-wide text-white/85 md:text-xs"
+            }
+          >
+            {game.providerName ?? game.provider}
+          </span>
+          <p
+            className={
+              size === "small"
+                ? "line-clamp-2 max-w-[95%] text-xs font-bold leading-tight text-white drop-shadow-md md:text-sm"
+                : "line-clamp-2 max-w-[95%] text-sm font-bold leading-snug text-white drop-shadow-md md:text-base"
+            }
+          >
+            {game.name}
+          </p>
           <button
+            type="button"
             onClick={handlePlay}
-            className={`flex w-full items-center justify-center rounded-[10px] bg-[var(--color-accent)] font-bold text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-secondary)] ${size === "small" ? "px-2 py-1.5 text-xs" : "px-4 py-2 text-sm"}`}
+            className={`pointer-events-auto shrink-0 rounded-[10px] bg-[var(--color-accent)] font-bold text-[var(--color-accent-text)] shadow-lg transition-colors hover:bg-[var(--color-accent-secondary)] ${size === "small" ? "px-3 py-1.5 text-xs" : "px-5 py-2 text-sm"}`}
           >
             Jogar
           </button>
         </div>
       </div>
       {size !== "small" && (
-      <div className="absolute right-2 top-2 rounded-[8px] bg-black/60 px-2 py-0.5 text-xs text-white">
-        {game.providerName ?? game.provider}
-      </div>
+        <div className="absolute right-2 top-2 z-[6] rounded-[8px] bg-black/60 px-2 py-0.5 text-xs text-white transition-opacity duration-300 group-hover:opacity-0">
+          {game.providerName ?? game.provider}
+        </div>
       )}
     </div>
   );

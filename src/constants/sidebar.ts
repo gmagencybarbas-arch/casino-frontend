@@ -17,11 +17,12 @@ export const SIDEBAR_SECTIONS: SidebarSection[] = [
     sectionKey: "games",
     title: "Jogos",
     items: [
-      { label: "Hot Games", href: "/games/hot", icon: "fire" },
+      { label: "Todos os jogos", href: "/games/all", icon: "slot" },
       { label: "Favoritos", href: "/games/favorites", icon: "heart" },
       { label: "Jogos de Slots", href: "/games/slots", icon: "slot" },
       { label: "Cassino ao Vivo", href: "/games/live", icon: "live" },
-      { label: "Videobingo", href: "/videobingo", icon: "bingo" },
+      { label: "Jogos Crash", href: "/games/crash", icon: "fire" },
+      { label: "Videobingo", href: "/games/videobingo", icon: "bingo" },
     ],
   },
   {
@@ -29,7 +30,7 @@ export const SIDEBAR_SECTIONS: SidebarSection[] = [
     title: "Esports",
     items: [
       { label: "Campeonatos", href: "/sports/championships", icon: "trophy" },
-      { label: "Apostas ao Vivo", href: "/sports/live", icon: "chart" },
+      { label: "Apostas ao Vivo", href: "/games/sports", icon: "chart" },
     ],
   },
   {

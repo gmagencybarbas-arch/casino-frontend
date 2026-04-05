@@ -21,8 +21,11 @@ function thumbSmall(index: number) {
   return `/gamecard_img/175x175/${IMG_175[index % IMG_175.length]}`;
 }
 
-// Simulated network delay
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+// Simulated network delay (0 em dev — menos espera; mantém delay em produção para mocks)
+const delay = (ms: number) =>
+  process.env.NODE_ENV === "development"
+    ? Promise.resolve()
+    : new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 const MOCK_GAMES: Game[] = [
   { id: "1", name: "Gates of Olympus", slug: "gates-of-olympus", thumbnail: thumb(0), thumbnailSmall: thumbSmall(0), provider: "pragmatic-play", providerName: "Pragmatic Play", isFavorite: false, isHot: true },
@@ -49,6 +52,14 @@ const MOCK_GAMES: Game[] = [
   { id: "22", name: "Dream Catcher Live", slug: "dream-catcher-live", thumbnail: thumb(5), thumbnailSmall: thumbSmall(9), provider: "evolution", providerName: "Evolution", isFavorite: false, isHot: false },
   { id: "23", name: "Monopoly Live", slug: "monopoly-live", thumbnail: thumb(6), thumbnailSmall: thumbSmall(10), provider: "evolution", providerName: "Evolution", isFavorite: false, isHot: false },
   { id: "24", name: "Mega Ball Live", slug: "mega-ball-live", thumbnail: thumb(7), thumbnailSmall: thumbSmall(11), provider: "evolution", providerName: "Evolution", isFavorite: false, isHot: false },
+  { id: "25", name: "Video Bingo Aurora", slug: "video-bingo-aurora", thumbnail: thumb(0), thumbnailSmall: thumbSmall(0), provider: "videobingo", providerName: "Videobingo", isFavorite: false, isHot: false },
+  { id: "26", name: "Mega Bingo Live", slug: "mega-bingo-live", thumbnail: thumb(1), thumbnailSmall: thumbSmall(1), provider: "videobingo", providerName: "Videobingo", isFavorite: false, isHot: false },
+  { id: "27", name: "Bingo Brasil Show", slug: "bingo-brasil-show", thumbnail: thumb(2), thumbnailSmall: thumbSmall(2), provider: "videobingo", providerName: "Videobingo", isFavorite: true, isHot: false },
+  { id: "28", name: "Pachinko Bingo Gold", slug: "pachinko-bingo-gold", thumbnail: thumb(3), thumbnailSmall: thumbSmall(3), provider: "videobingo", providerName: "Videobingo", isFavorite: false, isHot: false },
+  { id: "29", name: "Salão Bingo Royal", slug: "salao-bingo-royal", thumbnail: thumb(4), thumbnailSmall: thumbSmall(4), provider: "videobingo", providerName: "Videobingo", isFavorite: false, isHot: false },
+  { id: "30", name: "Bingo Relâmpago", slug: "bingo-relampago", thumbnail: thumb(5), thumbnailSmall: thumbSmall(5), provider: "videobingo", providerName: "Videobingo", isFavorite: false, isHot: false },
+  { id: "31", name: "Showball Bingo Plus", slug: "showball-bingo-plus", thumbnail: thumb(6), thumbnailSmall: thumbSmall(6), provider: "videobingo", providerName: "Videobingo", isFavorite: false, isHot: false },
+  { id: "32", name: "Video Bingo Estrela", slug: "video-bingo-estrela", thumbnail: thumb(7), thumbnailSmall: thumbSmall(7), provider: "videobingo", providerName: "Videobingo", isFavorite: false, isHot: false },
 ];
 
 const MOCK_PROVIDERS: Provider[] = [
@@ -91,6 +102,11 @@ export const api = {
   async getLayout(): Promise<LayoutConfig> {
     await delay(100);
     return MOCK_LAYOUT;
+  },
+
+  async getAllGames(): Promise<Game[]> {
+    await delay(50);
+    return [...MOCK_GAMES];
   },
 
   async getGames(category?: string, options?: { limit?: number; offset?: number }): Promise<Game[]> {

@@ -41,7 +41,7 @@ export function Top10Block({ title, category = "top10", icon = "trophy" }: Top10
 
   return (
     <section className="mb-12" aria-label={title}>
-      <SectionHeader title={title} href="/games/top10" icon={icon} linkVariant="accent" />
+      <SectionHeader title={title} href="/games/all" icon={icon} linkVariant="accent" />
       <div className="relative min-w-0 max-w-full w-full">
         <CarouselContainer>
           <div className="min-w-0 max-w-full w-full px-2 md:px-4">

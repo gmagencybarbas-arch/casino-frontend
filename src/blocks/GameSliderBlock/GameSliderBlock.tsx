@@ -6,6 +6,7 @@ import type { Swiper as SwiperType } from "swiper";
 import { GameCard } from "@/components/GameCard";
 import { CarouselContainer } from "@/components/CarouselContainer";
 import { SectionHeader } from "@/components/SectionHeader";
+import { layoutBlockCategoryToGamesHref } from "@/lib/gameListingFilters";
 import { api } from "@/services/api";
 import type { Game } from "@/types/game";
 import { RECTANGULAR_GAME_SLIDER, rectangularGameSlideClass } from "@/lib/rectangularGameSwiper";
@@ -45,7 +46,12 @@ export function GameSliderBlock({ title, category, icon = "fire" }: GameSliderBl
 
   return (
     <section className="mb-12" aria-label={title}>
-      <SectionHeader title={title} href={`/games/${category ?? "all"}`} icon={icon} linkVariant="primary" />
+      <SectionHeader
+        title={title}
+        href={layoutBlockCategoryToGamesHref(category)}
+        icon={icon}
+        linkVariant="primary"
+      />
       <div className="relative min-w-0 max-w-full w-full">
         <CarouselContainer>
           <div className="min-w-0 max-w-full w-full px-2 md:px-4">
