@@ -143,23 +143,25 @@ export function GamesCategoryClient({
           <div
             className={
               isLiveListing
-                ? "grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 md:gap-3 lg:grid-cols-6 lg:gap-3 xl:grid-cols-7 xl:gap-3"
+                ? "grid grid-cols-3 gap-2 md:grid-cols-4 md:gap-3 lg:grid-cols-6 lg:gap-3 xl:grid-cols-7 xl:gap-3"
                 : "grid grid-cols-3 gap-3 md:grid-cols-6 md:gap-4"
             }
           >
-            {visibleGames.map((game) => (
+            {visibleGames.map((game, index) => (
               <div
                 key={game.id}
                 className={
                   isLiveListing
-                    ? "min-w-0"
-                    : "min-w-0 transition-transform duration-300 hover:scale-105"
+                    ? "min-w-0 [content-visibility:auto] [contain-intrinsic-size:100px_160px]"
+                    : "min-w-0 transition-transform duration-300 hover:scale-105 [content-visibility:auto] [contain-intrinsic-size:90px_90px]"
                 }
               >
                 <GameCard
                   game={game}
                   size={isLiveListing ? "default" : "small"}
                   className="w-full max-w-none"
+                  priority={index < 12}
+                  listingThumbnail={isLiveListing}
                 />
               </div>
             ))}

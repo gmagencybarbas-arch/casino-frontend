@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo } from "react";
 import type { Game } from "@/types/game";
 
 const CARD_RATIO = 245 / 367;
@@ -11,11 +11,20 @@ interface GameCardProps {
   size?: "default" | "large" | "featured" | "small";
   rank?: number;
   className?: string;
+  /** Primeiras imagens da grelha: carregamento prioritário (mais rápido acima da dobra). */
+  priority?: boolean;
+  /** Listagens densas (ex.: cassino ao vivo): usa thumbnail 175px quando existir — menos bytes, mesma proporção com object-cover. */
+  listingThumbnail?: boolean;
 }
 
-export function GameCard({ game, size = "default", rank, className = "" }: GameCardProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
-
+export function GameCard({
+  game,
+  size = "default",
+  rank,
+  className = "",
+  priority = false,
+  listingThumbnail = false,
+}: GameCardProps) {
   const handlePlay = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
@@ -28,6 +37,27 @@ export function GameCard({ game, size = "default", rank, className = "" }: GameC
   const width =
     size === "featured" ? 245 : size === "large" ? 280 : size === "small" ? 175 : 200;
   const aspectRatio = size === "small" ? 1 : size === "featured" ? CARD_RATIO : CARD_RATIO;
+
+  const imageSrc = useMemo(() => {
+    if (size === "small" && game.thumbnailSmall) return game.thumbnailSmall;
+    if (listingThumbnail && game.thumbnailSmall) return game.thumbnailSmall;
+    return game.thumbnail;
+  }, [game.thumbnail, game.thumbnailSmall, listingThumbnail, size]);
+
+  const isRemote = imageSrc.startsWith("http");
+
+  const sizesAttr = useMemo(() => {
+    if (size === "small") {
+      return `(max-width: 640px) 34vw, (max-width: 768px) 130px, ${width}px`;
+    }
+    if (size === "featured") {
+      return `(max-width: 1023px) 34vw, 245px`;
+    }
+    if (listingThumbnail) {
+      return `(max-width: 640px) 34vw, (max-width: 1024px) 24vw, 200px`;
+    }
+    return `(max-width: 640px) 34vw, (max-width: 1023px) 28vw, 190px`;
+  }, [size, listingThumbnail, width]);
 
   return (
     <div
@@ -42,22 +72,21 @@ export function GameCard({ game, size = "default", rank, className = "" }: GameC
           {rank}
         </div>
       )}
-      <div className="relative w-full overflow-hidden" style={{ paddingBottom: `${100 / aspectRatio}%` }}>
+      <div
+        className="relative w-full overflow-hidden bg-[var(--color-card)]"
+        style={{ paddingBottom: `${100 / aspectRatio}%` }}
+      >
         <Image
-          src={size === "small" && game.thumbnailSmall ? game.thumbnailSmall : game.thumbnail}
+          src={imageSrc}
           alt={game.name}
           fill
-          sizes={
-            size === "small"
-              ? `(max-width: 768px) 130px, ${width}px`
-              : size === "featured"
-                ? `(max-width: 1023px) 34vw, 245px`
-                : `(max-width: 1023px) 34vw, 190px`
-          }
-          className={`object-cover transition-all duration-300 group-hover:scale-[1.02] ${isLoaded ? "opacity-100" : "opacity-0"}`}
-          loading="lazy"
-          onLoad={() => setIsLoaded(true)}
-          unoptimized
+          sizes={sizesAttr}
+          className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+          loading={priority ? "eager" : "lazy"}
+          priority={priority}
+          decoding="async"
+          fetchPriority={priority ? "high" : "auto"}
+          unoptimized={isRemote}
         />
       </div>
       <div className="pointer-events-none absolute inset-0 z-[8] flex flex-col items-center justify-center p-3 text-center opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
