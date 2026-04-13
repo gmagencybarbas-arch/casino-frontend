@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useMemo } from "react";
+import Link from "next/link";
+import { useMemo } from "react";
 import type { Game } from "@/types/game";
 
 const CARD_RATIO = 245 / 367;
@@ -25,14 +26,6 @@ export function GameCard({
   priority = false,
   listingThumbnail = false,
 }: GameCardProps) {
-  const handlePlay = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      console.log("Play game:", game.slug);
-    },
-    [game.slug]
-  );
-
   // featured = 245×367 (card destaque), large = 280px width, small = 175×175
   const width =
     size === "featured" ? 245 : size === "large" ? 280 : size === "small" ? 175 : 200;
@@ -60,8 +53,11 @@ export function GameCard({
   }, [size, listingThumbnail, width]);
 
   return (
-    <div
-      className={`group relative overflow-hidden rounded-[12px] bg-[var(--color-card)] shadow-[var(--shadow-card)] transition-all duration-300 hover:scale-[1.04] hover:shadow-[var(--shadow-card-hover)] ${className}`}
+    <Link
+      href={`/game/${game.slug}`}
+      prefetch={false}
+      aria-label={`Abrir ${game.name}`}
+      className={`group relative block overflow-hidden rounded-[12px] bg-[var(--color-card)] shadow-[var(--shadow-card)] transition-all duration-300 hover:scale-[1.04] hover:shadow-[var(--shadow-card-hover)] ${className}`}
       style={{ aspectRatio: String(aspectRatio) }}
     >
       {rank !== undefined && (
@@ -114,13 +110,11 @@ export function GameCard({
           >
             {game.name}
           </p>
-          <button
-            type="button"
-            onClick={handlePlay}
-            className={`pointer-events-auto shrink-0 rounded-[10px] bg-[var(--color-accent)] font-bold text-[var(--color-accent-text)] shadow-lg transition-colors hover:bg-[var(--color-accent-secondary)] ${size === "small" ? "px-3 py-1.5 text-xs" : "px-5 py-2 text-sm"}`}
+          <span
+            className={`pointer-events-auto shrink-0 rounded-[10px] bg-[var(--color-accent)] font-bold text-[var(--color-accent-text)] shadow-lg transition-colors group-hover:bg-[var(--color-accent-secondary)] ${size === "small" ? "px-3 py-1.5 text-xs" : "px-5 py-2 text-sm"}`}
           >
             Jogar
-          </button>
+          </span>
         </div>
       </div>
       {size !== "small" && (
@@ -128,6 +122,6 @@ export function GameCard({
           {game.providerName ?? game.provider}
         </div>
       )}
-    </div>
+    </Link>
   );
 }

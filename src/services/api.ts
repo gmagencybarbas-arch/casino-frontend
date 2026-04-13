@@ -79,6 +79,69 @@ const MOCK_LAYOUT: LayoutConfig = {
   ],
 };
 
+function slugHash(slug: string): number {
+  let h = 0;
+  for (let i = 0; i < slug.length; i += 1) h = (h * 31 + slug.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+function slugToTitle(slug: string): string {
+  const parts = slug.split("-").filter(Boolean);
+  if (parts.length === 0) return "Jogo";
+  return parts.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+}
+
+function buildFallbackGame(slug: string): Game {
+  const h = slugHash(slug);
+  const i = h % IMG_245.length;
+  const j = h % IMG_175.length;
+  return {
+    id: `gen-${slug}`,
+    name: slugToTitle(slug),
+    slug,
+    thumbnail: thumb(i),
+    thumbnailSmall: thumbSmall(j),
+    provider: "demo",
+    providerName: "Demo",
+    isFavorite: false,
+    isHot: false,
+  };
+}
+
+function inferGameType(g: Game): "Slot" | "Live" | "Crash" {
+  const s = g.slug.toLowerCase();
+  if (["aviator", "spaceman", "mines", "plinko"].some((x) => s.includes(x))) return "Crash";
+  if (s.includes("live") || g.provider === "evolution") return "Live";
+  return "Slot";
+}
+
+const TAG_POOL = ["#Recomendado", "#Rodadas grátis", "#Cashback", "#Popular"];
+
+function enrichGameDetail(g: Game): Game {
+  const h = slugHash(g.slug);
+  const gameType = g.gameType ?? inferGameType(g);
+  const rtp = g.rtp ?? `96.${(h % 8) + 1}%`;
+  const houseEdge = g.houseEdge ?? `${Math.min(5, 2 + (h % 3))}.${(h >> 3) % 10}%`;
+
+  const description =
+    g.description ??
+    `Experimente ${g.name} na nossa plataforma. Título ${gameType === "Live" ? "ao vivo com crupiê profissional" : gameType === "Crash" ? "estilo crash com multiplicadores dinâmicos" : "de slot com mecânica certificada e entretenimento imersivo"}, desenvolvido por ${g.providerName ?? g.provider}.`;
+
+  const tags =
+    g.tags && g.tags.length > 0
+      ? g.tags
+      : [TAG_POOL[h % TAG_POOL.length], TAG_POOL[(h + 2) % TAG_POOL.length]];
+
+  return {
+    ...g,
+    rtp,
+    houseEdge,
+    description,
+    gameType,
+    tags,
+  };
+}
+
 function getGamesByCategory(category: string): Game[] {
   switch (category) {
     case "hot":
@@ -125,15 +188,21 @@ export const api = {
 
   async getGameBySlug(slug: string): Promise<Game | null> {
     await delay(80);
-    const game = MOCK_GAMES.find((g) => g.slug === slug) ?? null;
-    return game;
+    const trimmed = slug?.trim();
+    if (!trimmed) return null;
+    const base = MOCK_GAMES.find((g) => g.slug === trimmed) ?? buildFallbackGame(trimmed);
+    return enrichGameDetail(base);
   },
 
   async getRelatedGames(slug: string, limit = 8): Promise<Game[]> {
     await delay(80);
     const game = MOCK_GAMES.find((g) => g.slug === slug);
-    if (!game) return [];
-    return MOCK_GAMES.filter((g) => g.slug !== slug && g.provider === game.provider).slice(0, limit);
+    const others = MOCK_GAMES.filter((g) => g.slug !== slug);
+    if (!game) return others.slice(0, limit);
+    const sameProv = others.filter((g) => g.provider === game.provider);
+    if (sameProv.length >= limit) return sameProv.slice(0, limit);
+    const rest = others.filter((g) => g.provider !== game.provider);
+    return [...sameProv, ...rest].slice(0, limit);
   },
 
   async getProviders(): Promise<Provider[]> {

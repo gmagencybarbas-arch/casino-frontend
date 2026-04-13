@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { useLayoutStore } from "@/store/useLayoutStore";
 import { useThemeStore } from "@/store/useThemeStore";
-import { useThemeCustomizerModalStore } from "@/store/useThemeCustomizerModalStore";
+import { useGlobalModal } from "@/store/useGlobalModal";
 import { useHeaderAuthPreviewStore } from "@/store/useHeaderAuthPreviewStore";
 import { HamburgerIcon } from "./HeaderIcons";
 import { HeaderBrand } from "./HeaderBrand";
@@ -17,11 +17,11 @@ export function Header() {
   const { sidebarCollapsed, toggleSidebar } = useLayoutStore();
   const { logo, logoUrl } = useThemeStore();
   const brandLogo = logo ?? logoUrl;
-  const setCustomizerOpen = useThemeCustomizerModalStore((s) => s.setOpen);
   const isGuestPreview = useHeaderAuthPreviewStore((s) => s.isGuestPreview);
+  const openModal = useGlobalModal((s) => s.open);
 
   const { balanceDisplay, balanceRefreshing, refreshBalance } = useHeaderBalance();
-  const openCustomizer = useCallback(() => setCustomizerOpen(true), [setCustomizerOpen]);
+  const openDepositModal = useCallback(() => openModal("deposit"), [openModal]);
 
   return (
     <header className="sticky top-0 z-40 w-full max-w-[100vw] min-w-0 shrink-0 overflow-x-hidden border-b border-[var(--color-border)] bg-[var(--color-background)] shadow-[var(--shadow-card)]">
@@ -50,7 +50,7 @@ export function Header() {
                 balanceRefreshing={balanceRefreshing}
                 onRefresh={refreshBalance}
               />
-              <HeaderDepositButton onClick={openCustomizer} />
+              <HeaderDepositButton onClick={openDepositModal} />
             </>
           )}
         </div>

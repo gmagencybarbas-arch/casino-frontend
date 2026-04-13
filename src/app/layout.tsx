@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { RegisterModalLazy } from "@/components/RegisterModal/RegisterModalLazy";
+import { GlobalModal } from "@/components/GlobalModal";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,7 +40,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <RegisterModalLazy />
+        <GlobalModal />
       </body>
     </html>
   );

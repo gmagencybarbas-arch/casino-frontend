@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { CasinoLayout } from "@/components/CasinoLayout";
 import { api } from "@/services/api";
 import { GamePlayer } from "./GamePlayer";
 
@@ -23,5 +24,9 @@ export default async function GamePage({ params }: GamePageProps) {
 
   if (!game) notFound();
 
-  return <GamePlayer game={game} />;
+  return (
+    <CasinoLayout>
+      <GamePlayer game={game} />
+    </CasinoLayout>
+  );
 }

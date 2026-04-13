@@ -13,6 +13,11 @@ export interface Game {
   tags?: string[];
   isFavorite?: boolean;
   isHot?: boolean;
+  /** Ficha do jogo (mock / backend) */
+  rtp?: string;
+  houseEdge?: string;
+  description?: string;
+  gameType?: "Slot" | "Live" | "Crash";
 }
 
 export interface Provider {
