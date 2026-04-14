@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { CasinoLayout } from "@/components/CasinoLayout";
 import { GamesCategoryClient } from "@/components/GamesListing";
 import { categories, getCategoryBySlug } from "@/data/categories";
@@ -36,12 +37,18 @@ export default async function GamesCategoryPage({ params }: GamesCategoryPagePro
 
   return (
     <CasinoLayout>
-      <GamesCategoryClient
-        categorySlug={cfg.slug}
-        categoryLabel={cfg.label}
-        categoryIcon={cfg.icon}
-        initialGames={initialGames}
-      />
+      <Suspense
+        fallback={
+          <div className="min-h-[50vh] animate-pulse rounded-xl bg-[var(--color-card)] px-4 py-10 md:px-6" />
+        }
+      >
+        <GamesCategoryClient
+          categorySlug={cfg.slug}
+          categoryLabel={cfg.label}
+          categoryIcon={cfg.icon}
+          initialGames={initialGames}
+        />
+      </Suspense>
     </CasinoLayout>
   );
 }

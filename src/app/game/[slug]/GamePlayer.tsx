@@ -181,8 +181,6 @@ export function GamePlayer({ game }: GamePlayerProps) {
     }
   }, [game.name]);
 
-  const bleed = "relative -mx-4 w-[calc(100%+2rem)] md:-mx-6 md:w-[calc(100%+3rem)]";
-
   const winsFormatted = useMemo(
     () =>
       displayLiveWins.toLocaleString("pt-BR", {
@@ -194,7 +192,7 @@ export function GamePlayer({ game }: GamePlayerProps) {
   );
 
   return (
-    <div className="w-full min-w-0">
+    <div className="w-full min-w-0 max-w-full overflow-x-clip [overscroll-behavior-x:none] touch-pan-y">
       {/* Breadcrumb */}
       <nav className="mb-4 flex flex-wrap items-center gap-4 text-sm text-[var(--color-text-muted)]" aria-label="Navegação">
         <Link href="/games/slots" className="transition-colors hover:text-[var(--color-primary)]">
@@ -228,7 +226,7 @@ export function GamePlayer({ game }: GamePlayerProps) {
       )}
 
       {/* Hero */}
-      <section className={`${bleed} mb-6 overflow-hidden rounded-2xl md:mb-8`} aria-label="Destaque do jogo">
+      <section className="relative mb-6 w-full max-w-full overflow-hidden rounded-2xl md:mb-8" aria-label="Destaque do jogo">
         <div className="relative min-h-[280px] md:min-h-[360px]">
           <div
             className="absolute inset-0 scale-110 bg-cover bg-center blur-3xl"

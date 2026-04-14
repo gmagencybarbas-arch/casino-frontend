@@ -1,5 +1,12 @@
 import type { Game } from "@/types/game";
 
+/** Mesma regra da pesquisa em `/games` e na SearchBar da home: nome contém o texto (trim, case-insensitive). */
+export function filterGamesByNameSearch(games: Game[], query: string): Game[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return games;
+  return games.filter((g) => g.name.toLowerCase().includes(q));
+}
+
 /** Mesma lógica de “live” usada na API mock. */
 export const LIVE_GAME_SLUGS = new Set([
   "lightning-roulette",

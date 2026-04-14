@@ -18,7 +18,7 @@ export function SidebarBanner() {
     <Link
       href={banner.link}
       className="relative mb-4 block w-full shrink-0 overflow-hidden rounded-[12px] bg-[var(--color-card)] shadow-[var(--shadow-card)] transition-transform duration-300 hover:scale-[1.02]"
-      style={{ aspectRatio: "329/198" }}
+      style={{ aspectRatio: "2/1" }}
     >
       <Image
         src={banner.image}
@@ -27,7 +27,7 @@ export function SidebarBanner() {
         className="object-cover"
         sizes="280px"
         loading="eager"
-        unoptimized
+        unoptimized={banner.image.startsWith("http")}
       />
     </Link>
   );

@@ -41,12 +41,13 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const layout = await api.getLayout();
+  const allGames = await api.getAllGames();
 
   return (
     <CasinoLayout>
       <WinnersStrip />
       <BannerSlider />
-      <SearchBar />
+      <SearchBar games={allGames} />
       <BlocksArea blocks={layout.blocks} />
     </CasinoLayout>
   );

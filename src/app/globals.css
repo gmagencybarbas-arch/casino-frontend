@@ -139,6 +139,46 @@ video {
   animation: game-cta-breathe 2.8s ease-in-out infinite;
 }
 
+/* Provider showcase — personagem entra da direita (rápido, leve) */
+@keyframes provider-showcase-char-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.provider-showcase-char {
+  animation: provider-showcase-char-in 0.38s ease-out both;
+}
+
+@keyframes provider-showcase-games-in {
+  from {
+    opacity: 0.45;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.provider-showcase-games-in {
+  animation: provider-showcase-games-in 0.45s ease-out both;
+}
+
+.provider-showcase-provider-card {
+  transition:
+    transform 0.45s ease,
+    opacity 0.45s ease,
+    border-color 0.45s ease,
+    background-color 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
 /* Hero banner desktop — slides laterais com opacidade (área visível limitada pelo overflow do pai) */
 .hero-banner-swiper .swiper-slide {
   opacity: 0.4;

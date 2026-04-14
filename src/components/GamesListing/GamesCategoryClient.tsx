@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { categories } from "@/data/categories";
-import { filterGamesByListingCategory } from "@/lib/gameListingFilters";
+import { filterGamesByListingCategory, filterGamesByNameSearch } from "@/lib/gameListingFilters";
 import type { Game } from "@/types/game";
 import { GameCard } from "@/components/GameCard";
+import { ProviderShowcaseBanner } from "@/components/ProviderShowcaseBanner";
 
 const INITIAL_VISIBLE = 18;
 /** 3 linhas × 7 colunas no desktop (xl). */
@@ -28,6 +30,7 @@ export function GamesCategoryClient({
   categoryIcon,
   initialGames,
 }: GamesCategoryClientProps) {
+  const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
   const isLiveListing = categorySlug === "live";
 
@@ -45,9 +48,14 @@ export function GamesCategoryClient({
   }, []);
 
   useEffect(() => {
-    setSearch("");
     setVisibleCount(categorySlug === "live" ? INITIAL_VISIBLE_LIVE : INITIAL_VISIBLE);
   }, [categorySlug]);
+
+  /** Abrir /games/...?q=... (ex.: vindo da home) preenche a pesquisa */
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q !== null && q !== "") setSearch(q);
+  }, [searchParams]);
 
   useEffect(() => {
     setVisibleCount(isLiveListing ? INITIAL_VISIBLE_LIVE : INITIAL_VISIBLE);
@@ -55,11 +63,7 @@ export function GamesCategoryClient({
 
   const filteredGames = useMemo(() => {
     let list = filterGamesByListingCategory(initialGames, categorySlug);
-    const q = search.trim().toLowerCase();
-    if (q) {
-      list = list.filter((g) => g.name.toLowerCase().includes(q));
-    }
-    return list;
+    return filterGamesByNameSearch(list, search);
   }, [initialGames, categorySlug, search]);
 
   const visibleGames = useMemo(
@@ -80,7 +84,7 @@ export function GamesCategoryClient({
   }, [loadIncrement]);
 
   return (
-    <div className="space-y-6 px-4 py-6 md:px-6">
+    <div className="max-w-full min-w-0 space-y-6 overflow-x-clip px-4 py-6 md:px-6">
       <h1 className="flex flex-wrap items-center gap-2 text-xl font-bold text-[var(--color-text)] md:text-2xl">
         <span aria-hidden>{categoryIcon}</span>
         <span>{categoryLabel}</span>
@@ -180,6 +184,10 @@ export function GamesCategoryClient({
           ) : null}
         </>
       )}
+
+      {initialGames.length > 0 ? (
+        <ProviderShowcaseBanner games={filteredGames.length > 0 ? filteredGames : initialGames} />
+      ) : null}
     </div>
   );
 }

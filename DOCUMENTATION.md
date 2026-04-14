@@ -2,6 +2,8 @@
 
 Esta documentação serve como guia definitivo para o projeto do frontend do Cassino. Ela explica toda a arquitetura, como as coisas funcionam por baixo dos panos, o que foi implementado nas últimas atualizações e, mais importante, **como e onde fazer modificações ou integrar com o backend**.
 
+**Também existem:** [docs/ASSETS_DESIGN_WHITELABEL.md](./docs/ASSETS_DESIGN_WHITELABEL.md) — inventário de **imagens locais**, **design system** (tokens CSS) e **white-label** (tema, loja Zustand, integração backend).
+
 ---
 
 ## 1. Visão Geral e Arquitetura 🏗️

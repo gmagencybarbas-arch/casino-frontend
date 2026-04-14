@@ -250,9 +250,9 @@ export const api = {
     await delay(80);
     return {
       id: "sb1",
-      image: "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=329&h=198&fit=crop",
+      image: "/promo/sidebar-tigre-da-sorte.png",
       link: "/promo/sidebar",
-      title: "Promo Destaque",
+      title: "Tigre da Sorte",
     };
   },
 };

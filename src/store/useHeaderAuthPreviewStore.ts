@@ -1,15 +1,17 @@
 import { create } from "zustand";
 
 /**
- * Demo / apresentação: alternar header entre “logado” (saldo + depositar)
- * e “deslogado” (Entre + Cadastre-se). Ativado ao ir em Promoções.
+ * Preview do header: por defeito mostra convidado (Entre + Cadastre-se).
+ * Após “login” no modal, fica logado (saldo + depositar) até nova sessão/recarga
+ * se não fizer persistência (demo).
  */
 interface HeaderAuthPreviewState {
+  /** true = cabeçalho deslogado (convidado); false = logado (saldo + depositar) */
   isGuestPreview: boolean;
   setGuestPreview: (guest: boolean) => void;
 }
 
 export const useHeaderAuthPreviewStore = create<HeaderAuthPreviewState>((set) => ({
-  isGuestPreview: false,
+  isGuestPreview: true,
   setGuestPreview: (guest) => set({ isGuestPreview: guest }),
 }));
