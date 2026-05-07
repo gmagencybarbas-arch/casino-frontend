@@ -1,6 +1,12 @@
 import { create } from "zustand";
 
-export type GlobalModalType = "register" | "login" | "deposit" | null;
+export type GlobalModalType =
+  | "register"
+  | "login"
+  | "deposit"
+  | "withdraw"
+  | "support"
+  | null;
 
 interface GlobalModalState {
   type: GlobalModalType;

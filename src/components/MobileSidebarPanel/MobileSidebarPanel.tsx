@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { useLayoutStore } from "@/store/useLayoutStore";
+import { useGlobalModal } from "@/store/useGlobalModal";
 import { SIDEBAR_SECTIONS } from "@/constants/sidebar";
 import { SidebarIcon } from "@/components/Sidebar/SidebarIcon";
 import { getSidebarIconWrapperClass } from "@/components/Sidebar/sidebarIconStyles";
 
 export function MobileSidebarPanel() {
   const { mobileMenuOpen, setMobileMenuOpen } = useLayoutStore();
+  const openModal = useGlobalModal((s) => s.open);
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -56,16 +58,32 @@ export function MobileSidebarPanel() {
               <ul className="space-y-0.5">
                 {section.items.map((item) => (
                   <li key={item.href + item.label}>
-                    <Link
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 rounded-[12px] px-3 py-3 text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-card)] hover:text-[var(--color-accent)]"
-                    >
-                      <span className={getSidebarIconWrapperClass(section.sectionKey, item.icon)}>
-                        <SidebarIcon name={item.icon} />
-                      </span>
-                      <span>{item.label}</span>
-                    </Link>
+                    {item.icon === "chat" ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          openModal("support");
+                        }}
+                        className="flex w-full items-center gap-3 rounded-[12px] px-3 py-3 text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-card)] hover:text-[var(--color-accent)]"
+                      >
+                        <span className={getSidebarIconWrapperClass(section.sectionKey, item.icon)}>
+                          <SidebarIcon name={item.icon} />
+                        </span>
+                        <span>{item.label}</span>
+                      </button>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-3 rounded-[12px] px-3 py-3 text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-card)] hover:text-[var(--color-accent)]"
+                      >
+                        <span className={getSidebarIconWrapperClass(section.sectionKey, item.icon)}>
+                          <SidebarIcon name={item.icon} />
+                        </span>
+                        <span>{item.label}</span>
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

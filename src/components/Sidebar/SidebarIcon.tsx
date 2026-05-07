@@ -101,6 +101,11 @@ const iconMap: Record<string, React.ReactNode> = {
       <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
     </svg>
   ),
+  account: (
+    <svg className="h-5 w-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.34 0-10 1.67-10 5v3h20v-3c0-3.33-6.66-5-10-5z" />
+    </svg>
+  ),
 };
 
 interface SidebarIconProps {

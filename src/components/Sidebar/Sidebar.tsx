@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useLayoutStore } from "@/store/useLayoutStore";
+import { useGlobalModal } from "@/store/useGlobalModal";
 import { SIDEBAR_SECTIONS } from "@/constants/sidebar";
 import { SidebarIcon } from "./SidebarIcon";
 import { getSidebarIconWrapperClass } from "./sidebarIconStyles";
@@ -26,6 +27,7 @@ function ChevronIcon({ open }: { open: boolean }) {
 
 export function Sidebar() {
   const { sidebarCollapsed } = useLayoutStore();
+  const openModal = useGlobalModal((s) => s.open);
 
   return (
     <aside
@@ -44,15 +46,28 @@ export function Sidebar() {
             {SIDEBAR_SECTIONS.flatMap((section) =>
               section.items.map((item) => (
                 <li key={`${section.sectionKey}-${item.href}-${item.label}`}>
-                  <Link
-                    href={item.href}
-                    className="flex items-center justify-center gap-3 rounded-lg px-2 py-2 text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-card)] hover:text-[var(--color-primary)]"
-                    title={item.label}
-                  >
-                    <span className={getSidebarIconWrapperClass(section.sectionKey, item.icon)}>
-                      <SidebarIcon name={item.icon} />
-                    </span>
-                  </Link>
+                  {item.icon === "chat" ? (
+                    <button
+                      type="button"
+                      onClick={() => openModal("support")}
+                      className="flex w-full items-center justify-center gap-3 rounded-lg px-2 py-2 text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-card)] hover:text-[var(--color-primary)]"
+                      title={item.label}
+                    >
+                      <span className={getSidebarIconWrapperClass(section.sectionKey, item.icon)}>
+                        <SidebarIcon name={item.icon} />
+                      </span>
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="flex items-center justify-center gap-3 rounded-lg px-2 py-2 text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-card)] hover:text-[var(--color-primary)]"
+                      title={item.label}
+                    >
+                      <span className={getSidebarIconWrapperClass(section.sectionKey, item.icon)}>
+                        <SidebarIcon name={item.icon} />
+                      </span>
+                    </Link>
+                  )}
                 </li>
               ))
             )}
@@ -73,6 +88,7 @@ function SidebarCollapsibleSection({
   section: (typeof SIDEBAR_SECTIONS)[number];
 }) {
   const [open, setOpen] = useState(true);
+  const openModal = useGlobalModal((s) => s.open);
 
   return (
     <div className="min-w-0">
@@ -97,15 +113,28 @@ function SidebarCollapsibleSection({
         <ul className="space-y-0.5 pt-1">
           {section.items.map((item) => (
             <li key={item.href + item.label}>
-              <Link
-                href={item.href}
-                className="flex items-center gap-3 rounded-lg px-2 py-2 text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-card)] hover:text-[var(--color-primary)]"
-              >
-                <span className={getSidebarIconWrapperClass(section.sectionKey, item.icon)}>
-                  <SidebarIcon name={item.icon} />
-                </span>
-                <span className="truncate">{item.label}</span>
-              </Link>
+              {item.icon === "chat" ? (
+                <button
+                  type="button"
+                  onClick={() => openModal("support")}
+                  className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-card)] hover:text-[var(--color-primary)]"
+                >
+                  <span className={getSidebarIconWrapperClass(section.sectionKey, item.icon)}>
+                    <SidebarIcon name={item.icon} />
+                  </span>
+                  <span className="truncate">{item.label}</span>
+                </button>
+              ) : (
+                <Link
+                  href={item.href}
+                  className="flex items-center gap-3 rounded-lg px-2 py-2 text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-card)] hover:text-[var(--color-primary)]"
+                >
+                  <span className={getSidebarIconWrapperClass(section.sectionKey, item.icon)}>
+                    <SidebarIcon name={item.icon} />
+                  </span>
+                  <span className="truncate">{item.label}</span>
+                </Link>
+              )}
             </li>
           ))}
         </ul>

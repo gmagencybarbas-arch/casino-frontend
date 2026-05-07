@@ -4,9 +4,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useGlobalModal } from "@/store/useGlobalModal";
 import { useHeaderAuthPreviewStore } from "@/store/useHeaderAuthPreviewStore";
 import { useThemeCustomizerModalStore } from "@/store/useThemeCustomizerModalStore";
+import { useAccountStore } from "@/store/useAccountStore";
 import { SITE_NAME } from "@/constants/site";
 import desktopBannerDefault from "@/services/img_banner_register/registredesktop.png";
 import mobileBannerDefault from "@/services/img_banner_register/registremobile.png";
+import { formatBRL } from "@/lib/accountFormat";
 
 const inputClassName =
   "w-full rounded-lg border border-white/10 bg-black px-4 py-3 text-white placeholder:text-gray-400 outline-none focus:border-[var(--color-primary)]";
@@ -32,6 +34,9 @@ export function GlobalModal() {
   const { isOpen, type, close, open: openModal } = useGlobalModal();
   const setGuestPreview = useHeaderAuthPreviewStore((s) => s.setGuestPreview);
   const setCustomizerOpen = useThemeCustomizerModalStore((s) => s.setOpen);
+  const loginMock = useAccountStore((s) => s.loginMock);
+  const requestWithdraw = useAccountStore((s) => s.requestWithdraw);
+  const walletBalance = useAccountStore((s) => s.wallet.totalBalance);
 
   const [loginId, setLoginId] = useState("");
   const [loginSenha, setLoginSenha] = useState("");
@@ -45,6 +50,9 @@ export function GlobalModal() {
   const [codigoIndicacao, setCodigoIndicacao] = useState("");
 
   const [valorDeposito, setValorDeposito] = useState("");
+  const [valorSaque, setValorSaque] = useState("");
+  const [tipoPix, setTipoPix] = useState("cpf");
+  const [chavePix, setChavePix] = useState("130.589.359-29");
 
   const resetForms = useCallback(() => {
     setLoginId("");
@@ -57,6 +65,9 @@ export function GlobalModal() {
     setAceitoTermos(false);
     setCodigoIndicacao("");
     setValorDeposito("");
+    setValorSaque("");
+    setTipoPix("cpf");
+    setChavePix("130.589.359-29");
   }, []);
 
   useEffect(() => {
@@ -82,6 +93,7 @@ export function GlobalModal() {
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginAceitoTermos) return;
+    loginMock();
     close();
     setGuestPreview(false);
   };
@@ -96,6 +108,14 @@ export function GlobalModal() {
     close();
   };
 
+  const handleWithdrawSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const parsed = Number(valorSaque.replace(/[^\d,.-]/g, "").replace(",", "."));
+    if (!Number.isFinite(parsed) || parsed <= 0) return;
+    requestWithdraw(parsed);
+    close();
+  };
+
   const openThemeFromDeposit = () => {
     close();
     setCustomizerOpen(true);
@@ -105,6 +125,8 @@ export function GlobalModal() {
 
   const desktopSrc = desktopBannerDefault.src;
   const mobileSrc = mobileBannerDefault.src;
+  const withdrawValue = Number(valorSaque.replace(/[^\d,.-]/g, "").replace(",", "."));
+  const afterWithdraw = Number.isFinite(withdrawValue) ? Math.max(0, walletBalance - withdrawValue) : walletBalance;
 
   return (
     <div
@@ -417,6 +439,95 @@ export function GlobalModal() {
                     Personalizar cores do tema
                   </button>
                 </form>
+              </>
+            )}
+
+            {type === "withdraw" && (
+              <>
+                <div className="mb-6 w-full max-w-md md:mb-8">
+                  <h2
+                    id="global-modal-title"
+                    className="text-balance text-xl font-bold tracking-tight text-[var(--color-text)] md:text-2xl md:font-bold md:text-[var(--color-primary)]"
+                  >
+                    Solicitar saque
+                  </h2>
+                  <p className="mt-3 text-balance text-sm leading-relaxed text-[var(--color-text-muted)] md:mt-4">
+                    O saque deve ser realizado exclusivamente para contas ou chaves vinculadas ao CPF do titular.
+                  </p>
+                </div>
+                <form onSubmit={handleWithdrawSubmit} className="flex w-full max-w-md flex-col items-center gap-3 md:mx-auto">
+                  <div className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-background-secondary)] px-3 py-2 text-left text-xs text-[var(--color-text-muted)]">
+                    Nome: <span className="text-[var(--color-text)]">Joassir de Santos Nogueira</span>
+                    <br />
+                    CPF: <span className="text-[var(--color-text)]">130.589.359-29</span>
+                  </div>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={valorSaque}
+                    onChange={(e) => setValorSaque(e.target.value)}
+                    className={inputClassName}
+                    placeholder="Valor do saque (R$)"
+                  />
+                  <select
+                    value={tipoPix}
+                    onChange={(e) => setTipoPix(e.target.value)}
+                    className={inputClassName}
+                  >
+                    <option value="cpf">CPF</option>
+                    <option value="telefone">Telefone</option>
+                    <option value="email">Email</option>
+                    <option value="aleatoria">Aleatoria</option>
+                    <option value="conta_bancaria">Conta bancaria</option>
+                  </select>
+                  <input
+                    type="text"
+                    value={chavePix}
+                    onChange={(e) => setChavePix(e.target.value)}
+                    className={inputClassName}
+                    placeholder="Chave Pix"
+                  />
+                  <div className="w-full rounded-lg border border-[var(--color-border)] bg-[var(--color-background-secondary)] px-3 py-2 text-left text-xs">
+                    <p className="text-[var(--color-text-muted)]">Saldo atual: <span className="font-semibold text-[var(--color-text)]">{formatBRL(walletBalance)}</span></p>
+                    <p className="mt-1 text-[var(--color-text-muted)]">
+                      Saldo apos saque:{" "}
+                      <span className="font-semibold text-rose-300 transition-all">{formatBRL(afterWithdraw)}</span>
+                    </p>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full rounded-lg bg-[var(--color-primary)] py-3 text-sm font-bold text-black transition hover:brightness-110"
+                  >
+                    Confirmar saque
+                  </button>
+                </form>
+              </>
+            )}
+
+            {type === "support" && (
+              <>
+                <div className="mb-6 w-full max-w-md md:mb-8">
+                  <h2
+                    id="global-modal-title"
+                    className="text-balance text-xl font-bold tracking-tight text-[var(--color-text)] md:text-2xl md:font-bold md:text-[var(--color-primary)]"
+                  >
+                    Suporte ao vivo
+                  </h2>
+                  <p className="mt-3 text-balance text-sm leading-relaxed text-[var(--color-text-muted)] md:mt-4">
+                    Atendimento 24h. Em ambiente real, este botao abre o live chat do provedor.
+                  </p>
+                </div>
+                <div className="w-full max-w-md space-y-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-background-secondary)] p-4 text-left">
+                  <p className="text-sm text-[var(--color-text)]">Tempo medio de resposta: 2 minutos</p>
+                  <p className="text-xs text-[var(--color-text-muted)]">Fale com financeiro, bonus, limite de conta ou verificacao KYC.</p>
+                  <button
+                    type="button"
+                    onClick={close}
+                    className="w-full rounded-lg bg-[var(--color-primary)] py-3 text-sm font-bold text-black transition hover:brightness-110"
+                  >
+                    Iniciar atendimento
+                  </button>
+                </div>
               </>
             )}
           </div>
