@@ -9,7 +9,7 @@ const NAV_ITEMS = [
   { href: "#", label: "Menu", action: "menu" as const, icon: "menu" as const },
   { href: "/games/all", label: "Cassino", action: null, icon: "slot" as const },
   { href: "/", label: "Home", action: null, icon: "home" as const },
-  { href: "/sports", label: "Esportes", action: null, icon: "trophy" as const },
+  { href: "/tournaments", label: "Torneios", action: null, icon: "trophy" as const },
   { href: "/account", label: "Conta", action: null, icon: "account" as const },
 ];
 

@@ -3,8 +3,10 @@
  * All endpoints are designed for future white-label backend integration
  */
 
+import { getTournamentBySlugMock, tournamentsMock } from "@/data/tournamentsMock";
 import type { Game, Provider } from "@/types/game";
 import type { LayoutConfig } from "@/types/layout";
+import type { Tournament, TournamentWithGames } from "@/types/tournament";
 import slide1 from "@/components/BannerSlider/slides/slide1.jpg";
 import slide2 from "@/components/BannerSlider/slides/slide2.jpg";
 import slide3 from "@/components/BannerSlider/slides/slide3.jpg";
@@ -73,9 +75,19 @@ const MOCK_LAYOUT: LayoutConfig = {
   blocks: [
     { type: "featured_games", title: "Jogos de Cassino Recomendados", category: "hot", position: 1 },
     { type: "live_casino", title: "Cassino ao Vivo", category: "live", position: 2 },
-    { type: "popular_games", title: "Jogos Populares", category: "popular", position: 3 },
-    { type: "top10", title: "Top 10 Brasil", category: "top10", position: 4 },
-    { type: "providers", title: "Provedores", position: 5 },
+    {
+      type: "tournaments",
+      title: "Torneios em Destaque",
+      position: 3,
+      config: {
+        enabled: true,
+        subtitle: "Competições com premiações ao vivo",
+        limit: 6,
+      },
+    },
+    { type: "popular_games", title: "Jogos Populares", category: "popular", position: 4 },
+    { type: "top10", title: "Top 10 Brasil", category: "top10", position: 5 },
+    { type: "providers", title: "Provedores", position: 6 },
   ],
 };
 
@@ -254,5 +266,23 @@ export const api = {
       link: "/promo/sidebar",
       title: "Tigre da Sorte",
     };
+  },
+
+  async getTournaments(options?: { featured?: boolean; limit?: number }): Promise<Tournament[]> {
+    await delay(80);
+    let list = [...tournamentsMock];
+    if (options?.featured) list = list.filter((t) => t.featured);
+    const lim = options?.limit ?? list.length;
+    return list.slice(0, lim);
+  },
+
+  async getTournamentBySlug(slug: string): Promise<TournamentWithGames | null> {
+    await delay(80);
+    const trimmed = slug?.trim();
+    if (!trimmed) return null;
+    const base = getTournamentBySlugMock(trimmed);
+    if (!base) return null;
+    const games = base.gameSlugs.map((s) => MOCK_GAMES.find((g) => g.slug === s) ?? buildFallbackGame(s));
+    return { ...base, games };
   },
 };

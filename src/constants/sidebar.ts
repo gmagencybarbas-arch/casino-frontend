@@ -18,6 +18,7 @@ export const SIDEBAR_SECTIONS: SidebarSection[] = [
     title: "Jogos",
     items: [
       { label: "Todos os jogos", href: "/games/all", icon: "slot" },
+      { label: "Torneios", href: "/tournaments", icon: "trophy" },
       { label: "Favoritos", href: "/games/favorites", icon: "heart" },
       { label: "Jogos de Slots", href: "/games/slots", icon: "slot" },
       { label: "Cassino ao Vivo", href: "/games/live", icon: "live" },

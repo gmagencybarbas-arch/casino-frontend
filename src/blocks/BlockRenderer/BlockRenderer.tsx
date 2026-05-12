@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import type { LayoutBlock } from "@/types/layout";
+import type { TournamentsBlockConfig } from "@/types/tournament";
 
 const blockLoading = (
   <div className="mb-10 h-[300px] animate-pulse rounded-xl bg-[var(--color-card)]" />
@@ -35,6 +36,14 @@ const ProvidersBlock = dynamic(
   () =>
     import("@/blocks/ProvidersBlock").then((m) => ({
       default: m.ProvidersBlock,
+    })),
+  { loading: () => blockLoading }
+);
+
+const TournamentsBlock = dynamic(
+  () =>
+    import("@/blocks/TournamentsBlock").then((m) => ({
+      default: m.TournamentsBlock,
     })),
   { loading: () => blockLoading }
 );
@@ -77,6 +86,11 @@ export function BlockRenderer({ block }: BlockRendererProps) {
       );
     case "providers":
       return <ProvidersBlock />;
+    case "tournaments": {
+      const cfg = block.config as TournamentsBlockConfig | undefined;
+      if (cfg?.enabled === false) return null;
+      return <TournamentsBlock title={block.title} config={block.config} />;
+    }
     default:
       return null;
   }

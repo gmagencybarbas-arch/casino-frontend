@@ -6,7 +6,8 @@ export type BlockType =
   | "top10"
   | "providers"
   | "featured"
-  | "slider";
+  | "slider"
+  | "tournaments";
 
 export interface LayoutBlock {
   type: BlockType;

@@ -5,7 +5,11 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["swiper"],
   },
   async redirects() {
-    return [{ source: "/videobingo", destination: "/games/videobingo", permanent: true }];
+    return [
+      { source: "/videobingo", destination: "/games/videobingo", permanent: true },
+      { source: "/torneios", destination: "/tournaments", permanent: true },
+      { source: "/torneios/:slug", destination: "/tournaments/:slug", permanent: true },
+    ];
   },
   images: {
     remotePatterns: [
