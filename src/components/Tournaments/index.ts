@@ -10,3 +10,4 @@ export { TournamentActivityFeed } from "./TournamentActivityFeed";
 export { TournamentHowItWorks } from "./TournamentHowItWorks";
 export { TournamentGamesCarousel } from "./TournamentGamesCarousel";
 export { TournamentProgressBar } from "./TournamentProgressBar";
+export { TournamentAssetMedia } from "./TournamentAssetMedia";

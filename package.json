@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/sync-torneios.mjs",
+    "prebuild": "node scripts/sync-torneios.mjs",
+    "sync-torneios": "node scripts/sync-torneios.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

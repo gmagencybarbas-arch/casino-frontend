@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { formatBRL } from "@/lib/accountFormat";
 import { useAccountStore } from "@/store/useAccountStore";
 import { useGlobalModal } from "@/store/useGlobalModal";
 import { useTournamentEnrollmentStore } from "@/store/useTournamentEnrollmentStore";
 import type { Tournament } from "@/types/tournament";
+import { TournamentAssetMedia } from "./TournamentAssetMedia";
 import { TournamentCountdown } from "./TournamentCountdown";
 import { useTournamentCountdown } from "./useTournamentCountdown";
 
@@ -61,7 +61,6 @@ export function TournamentCard({ tournament }: TournamentCardProps) {
   };
 
   const thumb = t.thumbnail || t.banner;
-  const isRemote = thumb.startsWith("http");
 
   return (
     <div
@@ -76,13 +75,12 @@ export function TournamentCard({ tournament }: TournamentCardProps) {
 
       <div className="relative z-10 pointer-events-none flex h-full flex-col">
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--color-background-secondary)]">
-          <Image
+          <TournamentAssetMedia
             src={thumb}
             alt=""
             fill
             className="object-cover transition duration-500 group-hover:scale-[1.03]"
             sizes="(max-width: 640px) 88vw, 300px"
-            unoptimized={isRemote}
           />
           <div
             className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[var(--color-card)] via-transparent to-transparent opacity-95"

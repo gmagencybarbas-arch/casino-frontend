@@ -17,6 +17,10 @@
 /.next/
 /out/
 
+# cópia antiga; canónico: /torneios (raiz) + sync → /public/images/tournaments
+/public/torneios
+/public/images/tournaments
+
 # production
 /build
 

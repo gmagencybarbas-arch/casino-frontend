@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
     return [
       { source: "/videobingo", destination: "/games/videobingo", permanent: true },
       { source: "/torneios", destination: "/tournaments", permanent: true },
-      { source: "/torneios/:slug", destination: "/tournaments/:slug", permanent: true },
     ];
   },
   images: {

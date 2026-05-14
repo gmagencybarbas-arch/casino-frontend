@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { formatBRL } from "@/lib/accountFormat";
 import { useAccountStore } from "@/store/useAccountStore";
 import { useGlobalModal } from "@/store/useGlobalModal";
 import { useTournamentEnrollmentStore } from "@/store/useTournamentEnrollmentStore";
 import type { TournamentWithGames } from "@/types/tournament";
+import { TournamentAssetMedia } from "./TournamentAssetMedia";
 import { TournamentCountdown } from "./TournamentCountdown";
 import { TournamentProgressBar } from "./TournamentProgressBar";
 
@@ -58,19 +58,17 @@ export function TournamentHero({ tournament: t }: TournamentHeroProps) {
   };
 
   const banner = t.banner;
-  const isRemote = banner.startsWith("http");
 
   return (
     <div className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-card)] shadow-[var(--shadow-elevated)]">
       <div className="relative min-h-[220px] md:min-h-[320px]">
-        <Image
+        <TournamentAssetMedia
           src={banner}
           alt=""
           fill
           priority
           className="object-cover"
           sizes="100vw"
-          unoptimized={isRemote}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-background)] via-[var(--color-background)]/80 to-[var(--color-background)]/20" />
 
